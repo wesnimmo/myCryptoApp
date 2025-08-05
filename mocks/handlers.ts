@@ -8,8 +8,8 @@ export const handlers = [
     const vsCurrency = url.searchParams.get('vs_currency') || 'usd';
 
     const prices = {
-      usd: 67000,
-      eur: 62000, // Realistic EUR price
+      usd: 9999999,
+      eur: 777777777, // Realistic EUR price
     };
 
     let currentPrice: number;
