@@ -24,7 +24,9 @@ export default function RootLayout({
         <QueryProvider>
           <ThemeProvider>
             <Header />
-            {children}
+            <div className="w-full max-w-[1140px] mx-auto bg-[var(--background)] shadow-sm min-h-screen sm:p-4 sm:rounded-lg">
+              {children}
+            </div>
           </ThemeProvider>
         </QueryProvider>
       </body>

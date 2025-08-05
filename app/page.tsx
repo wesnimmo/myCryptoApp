@@ -10,7 +10,7 @@ export default function Home() {
 
   return (
     <div className="min-h-screen">
-      <main className="p-4 max-w-5xl mx-auto">
+      <main>
         {isLoading && <p className="text-[var(--text)]">Loading...</p>}
         {isError && <p className="text-red-500">Error: {error?.message}</p>}
         <ul className="space-y-2">
