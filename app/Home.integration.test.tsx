@@ -27,7 +27,7 @@ describe('Home integration test', () => {
 
 
     // Assert initial USD mock data is rendered (from MSW)
-    expect(await screen.findByText(/Bitcoin.*67000 USD/i)).toBeInTheDocument();
+    expect(await screen.findByText(/Bitcoin.*9999999 USD/i)).toBeInTheDocument();
 
     //   expect(await screen.findByText(/67000 USD/)).toBeInTheDocument();
 
@@ -35,7 +35,7 @@ describe('Home integration test', () => {
     await userEvent.selectOptions(screen.getByTestId('currency-select'), ['eur']);
 
     // Assert new EUR mock data is rendered
-    expect(await screen.findByText(/62000 EUR/)).toBeInTheDocument();
+    expect(await screen.findByText(/777777777 EUR/)).toBeInTheDocument();
     });
 
 })

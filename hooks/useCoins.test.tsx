@@ -33,7 +33,7 @@ describe('useCoins hook', () => {
       expect.objectContaining({
         id: 'bitcoin',
         name: expect.stringContaining('Bitcoin (Page 1, usd)'),
-        current_price: 67000,
+        current_price: 9999999,
       })
     );
   });
@@ -53,7 +53,7 @@ describe('useCoins hook', () => {
       expect.objectContaining({
         id: 'bitcoin',
         name: expect.stringContaining('Bitcoin (Page 1, eur)'),
-        current_price: 62000,
+        current_price: 777777777,
       })
     );
   });
