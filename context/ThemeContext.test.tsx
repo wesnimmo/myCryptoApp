@@ -1,68 +1,77 @@
-import { render, screen } from '@testing-library/react';
+// context/ThemeContext.test.tsx
+import { render, screen, cleanup, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { ThemeProvider } from './ThemeContext';
-import Header from '../components/Header';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { ThemeProvider } from '@/context/ThemeContext';
+import Header from '@/components/Header';
+import { server } from '../mocks/server';
+
+function createTestQueryClient() {
+  return new QueryClient({
+    defaultOptions: { queries: { retry: false, staleTime: 0 } },
+  });
+}
 
 describe('<ThemeProvider>', () => {
-
+  beforeAll(() => server.listen());
   beforeEach(() => {
-    render(
-      <ThemeProvider>
-        <Header />
-      </ThemeProvider>
-    );
+    // Reset MSW handlers and DOM
+    server.resetHandlers();
     document.documentElement.classList.remove('dark');
+
+    // Render component tree
+    const queryClient = createTestQueryClient();
+    render(
+      <QueryClientProvider client={queryClient}>
+        <ThemeProvider>
+          <Header />
+        </ThemeProvider>
+      </QueryClientProvider>
+    );
   });
+  afterEach(() => {
+    // Cleanup DOM and React tree
+    cleanup();
+  });
+  afterAll(() => server.close());
 
   test('theme toggle switches from light to dark', async () => {
+    // Wait for currencies to load to ensure Header is fully rendered
+    await waitFor(() => {
+      expect(screen.getByTestId('currency-select')).toBeInTheDocument();
+    });
 
     const toggleButton = screen.getByTestId('theme-toggle');
+    expect(toggleButton).toContainElement(screen.getByTestId('moon-icon'));
+    expect(document.documentElement).not.toHaveClass('dark');
 
-    expect(document.documentElement.classList.contains('dark')).toBe(false);
-
-    // simulate user click
     await userEvent.click(toggleButton);
-
-    // assert the dark class was toggled onto <html>
-    expect(document.documentElement.classList.contains('dark')).toBe(true);
-
-    // Optional: check if sun icon is rendered
     expect(screen.getByTestId('sun-icon')).toBeInTheDocument();
+    expect(document.documentElement).toHaveClass('dark');
   });
 
-
   test('theme toggle switches from dark to light', async () => {
- 
+    // Simulate dark mode by clicking toggle
     const toggleButton = screen.getByTestId('theme-toggle');
-
     await userEvent.click(toggleButton);
 
-    expect(document.documentElement.classList.contains('dark')).toBe(true);
+    // Wait for currencies to load and verify dark mode
+    await waitFor(() => {
+      expect(screen.getByTestId('currency-select')).toBeInTheDocument();
+      expect(toggleButton).toContainElement(screen.getByTestId('sun-icon'));
+      expect(document.documentElement).toHaveClass('dark');
+    });
 
-    // simulate user click
     await userEvent.click(toggleButton);
-
-    // assert the dark class was toggled onto <html>
-    expect(document.documentElement.classList.contains('dark')).toBe(false);
-
-    // Optional: check if sun icon is rendered
-    expect(screen.queryByTestId('sun-icon')).not.toBeInTheDocument()
+    expect(screen.getByTestId('moon-icon')).toBeInTheDocument();
+    expect(document.documentElement).not.toHaveClass('dark');
   });
 
   test('currency selector updates the currency', async () => {
-  
-    // Assume your currency dropdown has test id 'currency-select'
-    const currencySelect = screen.getByTestId('currency-select');
+    const select = await screen.findByTestId('currency-select');
+    expect(select).toHaveValue('usd'); // Default from ThemeContext
 
-    // Assert default value, assuming it's 'usd'
-    expect((currencySelect as HTMLSelectElement).value).toBe('usd');
-
-    // Change currency to eur
-    await userEvent.selectOptions(currencySelect, 'eur');
-
-    // Assert that the value changed
-    expect((currencySelect as HTMLSelectElement).value).toBe('eur');
+    await userEvent.selectOptions(select, 'eur');
+    expect(select).toHaveValue('eur');
   });
-
-
-})
+});

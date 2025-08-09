@@ -27,3 +27,8 @@ export const getCoinsMarkets = async (
   });
   return response.data;
 };
+
+export const getCurrencies = async (): Promise<string[]> => {
+  const response = await apiClient.get<string[]>('/simple/supported_vs_currencies');
+  return response.data;
+};

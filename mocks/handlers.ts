@@ -27,4 +27,9 @@ export const handlers = [
       },
     ]);
   }),
+
+  // New handler for supported currencies
+  http.get('https://api.coingecko.com/api/v3/simple/supported_vs_currencies', () => {
+    return HttpResponse.json(['usd', 'eur', 'gbp']);
+  }),
 ];
