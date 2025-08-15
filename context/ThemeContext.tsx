@@ -1,5 +1,6 @@
 'use client';
 
+import { useLocalStorage } from '@/hooks/useLocalStorage';
 import { createContext, useContext, useState, ReactNode } from 'react';
 
 interface ThemeContextType {
@@ -12,8 +13,9 @@ interface ThemeContextType {
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 export const ThemeProvider = ({ children }: { children: ReactNode }) => {
-  const [isDarkMode, setIsDarkMode] = useState<boolean>(false);
-  const [currency, setCurrency] = useState<string>('usd');
+  const [isDarkMode, setIsDarkMode] = useLocalStorage('dark-mode', false);
+  const [currency, setCurrency] = useLocalStorage('currency', 'usd');
+
 
   const toggleTheme = () => {
     setIsDarkMode((prev) => !prev);

@@ -18,6 +18,7 @@ describe('<ThemeProvider>', () => {
     // Reset MSW handlers and DOM
     server.resetHandlers();
     document.documentElement.classList.remove('dark');
+    localStorage.clear();
 
     // Render component tree
     const queryClient = createTestQueryClient();
@@ -74,4 +75,30 @@ describe('<ThemeProvider>', () => {
     await userEvent.selectOptions(select, 'eur');
     expect(select).toHaveValue('eur');
   });
+
+  test('persists currency selection to localStorage', async () => {
+    // Arrange — render provider + Header
+    const select = await screen.findByTestId('currency-select');
+
+    // Act — change the currency
+    await userEvent.selectOptions(select, 'eur');
+
+    // Assert — localStorage recorded the change
+    expect(localStorage.getItem('currency')).toBe(JSON.stringify('eur'));
+  });
+
+  test('persists theme choice to localStorage', async () => {
+    const toggleButton = screen.getByTestId('theme-toggle');
+
+    // Start in light mode by default
+    expect(localStorage.getItem('dark-mode')).toBe('false');
+
+    // Act — toggle to dark mode
+    await userEvent.click(toggleButton);
+
+    // Assert — localStorage reflects dark mode
+    expect(localStorage.getItem('dark-mode')).toBe(JSON.stringify(true));
+  });
+
+
 });
