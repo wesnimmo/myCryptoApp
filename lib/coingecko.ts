@@ -1,8 +1,10 @@
 // lib/coingecko.ts
 import axios from 'axios';
 
+const API_BASE_URL = '/api/markets'; 
+
 const apiClient = axios.create({
-  baseURL: 'https://api.coingecko.com/api/v3',
+  baseURL: API_BASE_URL,
 });
 
 export interface Coin {

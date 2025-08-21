@@ -62,7 +62,7 @@ describe('useCoins hook', () => {
     // Temporarily override MSW handler to simulate an error
     const { server } = require('../mocks/server');
     server.use(
-      http.get('https://api.coingecko.com/api/v3/coins/markets', () => {
+      http.get('/api/markets/coins/markets', () => {
         return new HttpResponse(null, { status: 500 });
       })
     );

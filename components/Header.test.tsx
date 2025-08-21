@@ -23,7 +23,7 @@ describe('Header', () => {
   test('fetches and renders supported currencies from CoinGecko API', async () => {
     // Arrange: mock MSW response (already in handlers.ts, but can override if needed)
     server.use(
-      http.get('https://api.coingecko.com/api/v3/simple/supported_vs_currencies', () => {
+      http.get('/api/markets/simple/supported_vs_currencies', () => {
         return HttpResponse.json(['btc', 'eth', 'ltc']);
       })
     );
@@ -47,7 +47,7 @@ describe('Header', () => {
   test('displays error message when currency fetch fails', async () => {
     // Arrange: mock API error
     server.use(
-      http.get('https://api.coingecko.com/api/v3/simple/supported_vs_currencies', () => {
+      http.get('/api/markets/simple/supported_vs_currencies', () => {
         return HttpResponse.text('Internal Server Error', { status: 500 })
       })
     );

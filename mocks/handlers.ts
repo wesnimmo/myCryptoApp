@@ -2,7 +2,7 @@
 import { http, HttpResponse } from 'msw';
 
 export const handlers = [
-  http.get('https://api.coingecko.com/api/v3/coins/markets', ({ request }) => {
+  http.get('/api/markets/coins/markets', ({ request }) => {
     const url = new URL(request.url);
     const page = url.searchParams.get('page') || '1';
     const vsCurrency = url.searchParams.get('vs_currency') || 'usd';
@@ -29,7 +29,7 @@ export const handlers = [
   }),
 
   // New handler for supported currencies
-  http.get('https://api.coingecko.com/api/v3/simple/supported_vs_currencies', () => {
+  http.get('/api/markets/simple/supported_vs_currencies', () => {
     return HttpResponse.json(['usd', 'eur', 'gbp']);
   }),
 ];
