@@ -1,5 +1,5 @@
 // components/Header.test.tsx
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import { http, HttpResponse } from 'msw';
 import Header from './Header';
 import { ThemeProvider } from '@/context/ThemeContext';

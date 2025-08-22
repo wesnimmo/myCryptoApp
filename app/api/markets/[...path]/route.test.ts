@@ -1,5 +1,6 @@
 // app/api/markets/[...path]/route.test.ts
 
+import { NextRequest } from 'next/server';
 import { GET } from './route';
 
 describe('Proxy API Route: /api/markets/[...path]', () => {
@@ -22,10 +23,10 @@ describe('Proxy API Route: /api/markets/[...path]', () => {
     fetchSpy.mockResolvedValueOnce({ 
       json: async () => [{ id: 'bitcoin', name: 'Bitcoin', price: 50000 }],
       status: 200,
-    } as any);
+    } as Response);
 
     const url = 'http://localhost/api/markets/coins/markets?vs_currency=usd';
-    const request = { url, nextUrl: new URL(url) } as any;
+    const request = new NextRequest(url)
     const response = await GET(request);
     const data = await response.json();
 
@@ -39,7 +40,7 @@ describe('Proxy API Route: /api/markets/[...path]', () => {
     fetchSpy.mockRejectedValueOnce(new Error('network error')); // Use mockRejectedValueOnce
 
     const url = 'http://localhost/api/markets/coins/markets?vs_currency=usd';
-    const request = { url, nextUrl: new URL(url) } as any;
+    const request = new NextRequest(url)
     const response = await GET(request);
     const data = await response.json();
 
