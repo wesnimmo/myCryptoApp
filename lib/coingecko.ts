@@ -8,9 +8,16 @@ const apiClient = axios.create({
 });
 
 export interface Coin {
-    id: number;
-    name: string;
-    current_price: number;
+  id: string;
+  name: string;
+  symbol: string;
+  image: string;
+  current_price: number;
+  price_change_percentage_24h: number;
+  price_change_percentage_7d_in_currency: number;
+  total_volume: number;
+  sparkline_in_7d: { price: number[] };
+  // Add any other fields you use in your UI
 }
 
 export const getCoinsMarkets = async (
@@ -25,6 +32,7 @@ export const getCoinsMarkets = async (
       per_page: perPage,
       page,
       sparkline: true,
+      price_change_percentage: '1h,24h,7d'
     },
   });
   return response.data;
