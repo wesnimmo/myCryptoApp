@@ -4,6 +4,7 @@ import { ThemeProvider } from '../context/ThemeContext';
 import Header from '../components/Header';
 import Home from './page';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { formatCurrency } from '@/utils/format/currency';
 
 describe('Home integration test', () => {
 
@@ -28,7 +29,7 @@ describe('Home integration test', () => {
 
     // Assert initial USD mock data is rendered (from MSW)
     expect(await screen.findByText(/Bitcoin \(Page 1, usd\)/i)).toBeInTheDocument();
-    expect(screen.getByText("9999999")).toBeInTheDocument();
+    expect(screen.getByText(formatCurrency(9999999, "usd"))).toBeInTheDocument();
     expect(screen.getByTestId('currency-select')).toHaveValue('usd');
 
     //   expect(await screen.findByText(/67000 USD/)).toBeInTheDocument();
@@ -39,7 +40,7 @@ describe('Home integration test', () => {
     // Assert new EUR mock data is rendered
 
     expect(await screen.findByText(/Bitcoin \(Page 1, eur\)/i)).toBeInTheDocument();
-    expect(screen.getByText("777777777")).toBeInTheDocument();
+    expect(screen.getByText(formatCurrency(777777777, "eur"))).toBeInTheDocument();
     expect(screen.getByTestId('currency-select')).toHaveValue('eur');
 
    

@@ -22,6 +22,7 @@ export const handlers = [
     return HttpResponse.json([
       {
         id: 'bitcoin',
+        market_cap_rank: parseInt(page), // Or use a fixed rank or set dynamically
         name: `Bitcoin (Page ${page}, ${vsCurrency})`,
         symbol: 'BTC',
         image: 'https://assets.coingecko.com/coins/images/1/large/bitcoin.png',
@@ -30,8 +31,6 @@ export const handlers = [
         price_change_percentage_24h: 1.23,
         market_cap: 950000000000,
         total_volume: 1000000,
-        volume_market_cap: 0.001, // (total_volume / market_cap) or as needed
-        rank: parseInt(page), // Or use a fixed rank or set dynamically
         sparkline_in_7d: { price: [49500, 49600, 49800, 50000] }
       }
     ]);
