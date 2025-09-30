@@ -5,7 +5,7 @@ import './globals.css';
 import { QueryProvider } from '@/providers/QueryProvider';
 import { ThemeProvider } from '@/context/ThemeContext';
 import Header from '@/components/Header';
-import { MSWInit } from "./msw-init"; // client initializer
+// import { MSWInit } from "./msw-init"; // client initializer
 
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter' });
@@ -28,7 +28,7 @@ export default function RootLayout({
           <ThemeProvider>
             <Header />
             <div className="w-full max-w-[1140px] mx-auto bg-[var(--background)] shadow-sm min-h-screen sm:p-4 sm:rounded-lg">
-             <MSWInit />
+             {/* <MSWInit /> */}
               {children}
             </div>
           </ThemeProvider>

@@ -4,6 +4,7 @@
 import { FiSun, FiMoon } from "react-icons/fi";
 import { useTheme } from '../context/ThemeContext';
 import { useCurrencies } from "@/hooks/useCurrencies";
+import { ArrowPathIcon } from "@heroicons/react/24/outline";
 
 export default function Header() {
   const { isDarkMode, toggleTheme, currency, setCurrency } = useTheme();
@@ -23,7 +24,10 @@ export default function Header() {
       {isError ? (
           <p className="text-red-500">Failed to load currencies</p>
         ) : isLoading ? (
-          <p className="text-[var(--text)]">Loading currencies...</p>
+        <div className="flex justify-center items-center py-4">
+          <ArrowPathIcon className="h-6 w-6 text-blue-500 animate-spin" />
+          <span className="ml-2 text-[var(--text)]">Loading...</span>
+        </div>
         ) : (
         <select
           data-testid="currency-select"

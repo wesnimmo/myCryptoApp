@@ -1,25 +1,19 @@
-// lib/coingecko.ts
+
 import axios from 'axios';
+import type { Coin } from './types';
 
-const API_BASE_URL = '/api/markets'; 
 
-const apiClient = axios.create({
-  baseURL: API_BASE_URL,
+const isServer = typeof window === "undefined";
+
+const origin = isServer
+  ? process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000"
+  : "";
+
+export const apiClient = axios.create({
+  baseURL: `${origin}/api/markets`,
 });
 
-export interface Coin {
-  id: string;
-  market_cap_rank: number;
-  name: string;
-  symbol: string;
-  image: string;
-  current_price: number;
-  price_change_percentage_1h_in_currency: number;
-  price_change_percentage_24h: number;
-  market_cap: number;
-  total_volume: number;
-  sparkline_in_7d: { price: number[] };
-}
+
 
 export const getCoinsMarkets = async (
   currency: string = 'usd',
