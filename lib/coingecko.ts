@@ -1,4 +1,6 @@
 
+'use client'
+
 import axios from 'axios';
 import type { Coin } from './types';
 
