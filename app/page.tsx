@@ -1,3 +1,4 @@
+export const dynamic = 'force-dynamic';
 import CoinsTable from '@/components/coins/CoinTable';
 
 export default function Home() {
