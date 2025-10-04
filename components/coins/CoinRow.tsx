@@ -3,6 +3,7 @@ import React from "react";
 import { InformationCircleIcon, ChevronUpIcon, ChevronDownIcon } from "@heroicons/react/24/solid";
 import { formatCurrency, formatCurrencyCompact } from "@/utils/format/currency";
 import { Coin } from "@/lib/types";
+import Sparkline from "../charts/Sparkline";
 
 
 interface CoinRowProps {
@@ -134,10 +135,10 @@ export default function CoinRow({ coin, currency }: CoinRowProps) {
         </div>
      </td>
 
-      {/* Sparkline chart placeholder */}
       <td>
-        <div data-testid={`sparkline-${coin.id}`} className="h-6 w-24 bg-gradient-to-r from-blue-200 to-purple-300 rounded"></div>
-        {/* Replace above div with a real sparkline chart component! */}
+        <div data-testid={`sparkline-${coin.id}`}>
+          <Sparkline prices={coin.sparkline_in_7d.price} />
+        </div>
       </td>
     </tr>
   );

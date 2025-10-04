@@ -1,5 +1,5 @@
 // components/CoinTable.test.tsx
-import { render, screen } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import CoinTable from "./CoinTable";
 import { formatCurrency, formatCurrencyCompact } from "@/utils/format/currency";
@@ -56,7 +56,7 @@ function createTestQueryClient() {
 }
 
 describe("CoinTable component", () => {
-  it("renders headers and coin rows (no suspense in this test)", () => {
+  it("renders headers and coin rows (no suspense in this test)", async () => {
     const queryClient = createTestQueryClient();
     render(
       <QueryClientProvider client={queryClient}>
@@ -90,7 +90,7 @@ describe("CoinTable component", () => {
       screen.getByRole("columnheader", { name: /Vol \/ Mkt Cap/i })
     ).toBeInTheDocument();
     expect(
-      screen.getByRole("columnheader", { name: /Sparkline/i })
+      screen.getByRole("columnheader", { name: /Last 7 Days/i })
     ).toBeInTheDocument();
 
     // --- Coin #1 (Bitcoin) assertions ---
@@ -123,8 +123,12 @@ describe("CoinTable component", () => {
       screen.getByText(formatCurrencyCompact(850_000_000, "USD"))
     ).toBeInTheDocument();
 
-    // Sparkline placeholders
-    expect(screen.getByTestId("sparkline-bitcoin")).toBeInTheDocument();
-    expect(screen.getByTestId("sparkline-ethereum")).toBeInTheDocument();
+    // expect(screen.getByTestId("sparkline-bitcoin")).toBeInTheDocument();
+    // expect(screen.getByTestId("sparkline-ethereum")).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByTestId("sparkline-bitcoin")).toBeInTheDocument();
+      expect(screen.getByTestId("sparkline-ethereum")).toBeInTheDocument();
+    });
+    
   });
 });

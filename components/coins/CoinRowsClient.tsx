@@ -9,6 +9,7 @@ export default function CoinRowsClient() {
   const { currency } = useTheme();
   const { data: coins } = useCoinsSuspense(currency, 1)
 
+  console.log('Here are the coins-->', coins)
   
     if (!coins?.length) {
         return (

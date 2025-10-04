@@ -32,7 +32,7 @@ export default function CoinsTable() {
           <th scope="col" className="text-center py-4 px-2 font-semibold text-gray-700">Market Cap</th>
           <th scope="col" className="text-center py-4 px-2 font-semibold text-gray-700">Volume</th>
           <th scope="col" className="text-center py-4 px-2 font-semibold text-gray-700">Vol / Mkt Cap</th>
-          <th scope="col" className="text-center py-4 px-2 font-semibold text-gray-700">Sparkline</th>
+          <th scope="col" className="text-center py-4 px-2 font-semibold text-gray-700">Last 7 Days</th>
         </tr>
       </thead>
       <tbody>
