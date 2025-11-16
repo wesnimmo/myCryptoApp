@@ -16,7 +16,6 @@ export const apiClient = axios.create({
 });
 
 
-
 export const getCoinsMarkets = async (
   currency: string = 'usd',
   perPage: number = 10,

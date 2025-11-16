@@ -27,7 +27,7 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
       document.documentElement.classList.remove('dark');
       setIsDarkMode(false); // Update state to reflect default or light preference
     }
-  }, []); // Empty dependency array ensures this runs only once after initial render
+  }, []); 
 
 
   const toggleTheme = () => {

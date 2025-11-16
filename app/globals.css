@@ -18,7 +18,7 @@
 @layer base {
   :root {
     --background: var(--color-background);
-    --text: var(--color-text);
+    --text:  
     --font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
   }
   .dark {
