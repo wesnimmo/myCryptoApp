@@ -1,5 +1,6 @@
 // components/ListItem.tsx
 import React from "react";
+import Image from "next/image";
 import { InformationCircleIcon, ChevronUpIcon, ChevronDownIcon } from "@heroicons/react/24/solid";
 import { formatCurrency, formatCurrencyCompact } from "@/utils/format/currency";
 import { Coin } from "@/lib/types";
@@ -56,7 +57,9 @@ export default function CoinRow({ coin, currency }: CoinRowProps) {
         <div className="flex items-center text-center gap-2">
             {/* Reserve fixed space for the image */}
             <div className="w-8 flex-shrink-0 flex justify-center">
-                <img
+                <Image
+                    width={24}
+                    height={24}
                     src={coin.image}
                     alt={`${coin.name} logo`}
                     className="w-6 h-6 rounded-full border"

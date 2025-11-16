@@ -28,7 +28,7 @@ jest.mock('@/context/ThemeContext', () => ({
 }));
 
 // --- Define the mock hook function ---
-let mockUseCoinsInfinite = jest.fn();
+const mockUseCoinsInfinite = jest.fn();
 
 jest.mock('@/hooks/useCoinsInfinite', () => ({
   useCoinsInfinite: () => mockUseCoinsInfinite(),
