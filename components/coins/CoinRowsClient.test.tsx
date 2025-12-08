@@ -18,8 +18,16 @@ jest.mock("@/context/ThemeContext", () => ({
 // Mock CoinRow
 // ------------------------------
 jest.mock("./CoinRow", () => {
-  return function MockCoinRow({ coin }: { coin: any }) {
-    return <tr data-testid={`coin-row-${coin.id}`}><td>{coin.name}</td></tr>;
+  return function MockCoinRow({
+    coin,
+  }: {
+    coin: { id: string; name: string };
+  }) {
+    return (
+      <tr data-testid={`coin-row-${coin.id}`}>
+        <td>{coin.name}</td>
+      </tr>
+    );
   };
 });
 
@@ -28,7 +36,7 @@ jest.mock("./CoinRow", () => {
 // ------------------------------
 const mockUseCoinsInfinite = jest.fn();
 jest.mock("@/hooks/useCoinsInfinite", () => ({
-  useCoinsInfinite: (...args: any[]) => mockUseCoinsInfinite(...args),
+  useCoinsInfinite: (...args: unknown[]) => mockUseCoinsInfinite(...args),
 }));
 
 beforeEach(() => {
@@ -55,7 +63,7 @@ it("renders rows and the Load More button", () => {
     error: null,
   });
 
-  const { rerender } = render(<CoinRowsClient />);
+  render(<CoinRowsClient />);
 
   expect(screen.getByPlaceholderText(/search coins/i)).toBeInTheDocument();
   expect(screen.getByTestId("coin-row-bitcoin")).toBeInTheDocument();
@@ -66,7 +74,6 @@ it("renders rows and the Load More button", () => {
 // TEST B — Search updates the results
 // ======================================================
 it("updates rows when search text changes", () => {
-  // Initial state (no search)
   mockUseCoinsInfinite.mockReturnValue({
     status: "success",
     data: { pages: [[{ id: "bitcoin", name: "Bitcoin" }]] },
@@ -81,7 +88,6 @@ it("updates rows when search text changes", () => {
   const input = screen.getByPlaceholderText(/search coins/i);
   fireEvent.change(input, { target: { value: "eth" } });
 
-  // Simulate React Query calling the hook again with "eth"
   mockUseCoinsInfinite.mockReturnValue({
     status: "success",
     data: { pages: [[{ id: "ethereum", name: "Ethereum" }]] },
