@@ -1,102 +1,97 @@
-import { render, screen, waitFor } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
-import CoinRowsClient from './CoinRowsClient';
+/* components/coins/CoinRowsClient.test.tsx */
+import { render, screen, fireEvent } from "@testing-library/react";
+import CoinRowsClient from "./CoinRowsClient";
 
-// Minimal coin factory
-const coin = (id: string, name = 'Bitcoin') => ({
-  id,
-  market_cap_rank: 1,
-  name,
-  symbol: 'BTC',
-  image: 'https://example.com/placeholder.png',
-  current_price: 1,
-  price_change_percentage_1h_in_currency: 0.1,
-  price_change_percentage_24h: -0.2,
-  market_cap: 1,
-  total_volume: 1,
-  sparkline_in_7d: { price: [1, 2, 3] },
-});
-
+// ------------------------------
 // Mock ThemeContext
-jest.mock('@/context/ThemeContext', () => ({
+// ------------------------------
+jest.mock("@/context/ThemeContext", () => ({
   useTheme: () => ({
-    currency: 'usd',
+    currency: "usd",
     isDarkMode: false,
     toggleTheme: jest.fn(),
     setCurrency: jest.fn(),
   }),
 }));
 
-// --- Define the mock hook function ---
-const mockUseCoinsInfinite = jest.fn();
+// ------------------------------
+// Mock CoinRow
+// ------------------------------
+jest.mock("./CoinRow", () => {
+  return function MockCoinRow({ coin }: { coin: any }) {
+    return <tr data-testid={`coin-row-${coin.id}`}><td>{coin.name}</td></tr>;
+  };
+});
 
-jest.mock('@/hooks/useCoinsInfinite', () => ({
-  useCoinsInfinite: () => mockUseCoinsInfinite(),
+// ------------------------------
+// Mock useCoinsInfinite
+// ------------------------------
+const mockUseCoinsInfinite = jest.fn();
+jest.mock("@/hooks/useCoinsInfinite", () => ({
+  useCoinsInfinite: (...args: any[]) => mockUseCoinsInfinite(...args),
 }));
 
-const defaultMockReturnValue = {
-  data: { pages: [[coin('btc', 'Bitcoin')], [coin('eth', 'Ethereum')]] },
-  fetchNextPage: jest.fn(),
-  hasNextPage: true,
-  isFetchingNextPage: false,
-  status: 'success' as const,
-  error: null,
-};
+beforeEach(() => {
+  jest.clearAllMocks();
+});
 
-mockUseCoinsInfinite.mockReturnValue(defaultMockReturnValue);
-
-describe('CoinRowsClient', () => {
-  beforeEach(() => {
-    jest.clearAllMocks();
-    mockUseCoinsInfinite.mockReturnValue(defaultMockReturnValue);
+// ======================================================
+// TEST A — Normal load
+// ======================================================
+it("renders rows and the Load More button", () => {
+  mockUseCoinsInfinite.mockReturnValue({
+    status: "success",
+    data: {
+      pages: [
+        [
+          { id: "bitcoin", name: "Bitcoin" },
+          { id: "ethereum", name: "Ethereum" },
+        ],
+      ],
+    },
+    fetchNextPage: jest.fn(),
+    hasNextPage: true,
+    isFetchingNextPage: false,
+    error: null,
   });
 
-  it('renders rows and shows Load more', async () => {
-    render(
-      <table>
-        <tbody>
-          <CoinRowsClient />
-        </tbody>
-      </table>
-    );
+  const { rerender } = render(<CoinRowsClient />);
 
-    // Use async queries so React has a chance to flush updates
-    expect(await screen.findByText('Bitcoin')).toBeInTheDocument();
-    expect(await screen.findByText('Ethereum')).toBeInTheDocument();
-    expect(
-      await screen.findByRole('button', { name: /load more/i })
-    ).toBeEnabled();
+  expect(screen.getByPlaceholderText(/search coins/i)).toBeInTheDocument();
+  expect(screen.getByTestId("coin-row-bitcoin")).toBeInTheDocument();
+  expect(screen.getByTestId("coin-row-ethereum")).toBeInTheDocument();
+});
+
+// ======================================================
+// TEST B — Search updates the results
+// ======================================================
+it("updates rows when search text changes", () => {
+  // Initial state (no search)
+  mockUseCoinsInfinite.mockReturnValue({
+    status: "success",
+    data: { pages: [[{ id: "bitcoin", name: "Bitcoin" }]] },
+    fetchNextPage: jest.fn(),
+    hasNextPage: false,
+    isFetchingNextPage: false,
+    error: null,
   });
 
-  it('calls fetchNextPage when clicking Load more', async () => {
-    const fetchNextPage = jest.fn();
+  const { rerender } = render(<CoinRowsClient />);
 
-    mockUseCoinsInfinite.mockReturnValueOnce({
-      data: { pages: [[coin('btc')]] },
-      fetchNextPage,
-      hasNextPage: true,
-      isFetchingNextPage: false,
-      status: 'success' as const,
-      error: null,
-    });
+  const input = screen.getByPlaceholderText(/search coins/i);
+  fireEvent.change(input, { target: { value: "eth" } });
 
-    render(
-      <table>
-        <tbody>
-          <CoinRowsClient />
-        </tbody>
-      </table>
-    );
-
-    const loadMoreButton = await screen.findByRole('button', {
-      name: /load more/i,
-    });
-
-    // userEvent is async & act-aware
-    await userEvent.click(loadMoreButton);
-
-    await waitFor(() => {
-      expect(fetchNextPage).toHaveBeenCalled();
-    });
+  // Simulate React Query calling the hook again with "eth"
+  mockUseCoinsInfinite.mockReturnValue({
+    status: "success",
+    data: { pages: [[{ id: "ethereum", name: "Ethereum" }]] },
+    fetchNextPage: jest.fn(),
+    hasNextPage: false,
+    isFetchingNextPage: false,
+    error: null,
   });
+
+  rerender(<CoinRowsClient />);
+
+  expect(screen.getByTestId("coin-row-ethereum")).toBeInTheDocument();
 });

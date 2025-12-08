@@ -1,9 +1,7 @@
-
-'use client'
+'use client';
 
 import axios from 'axios';
 import type { Coin } from './types';
-
 
 const isServer = typeof window === "undefined";
 
@@ -15,11 +13,14 @@ export const apiClient = axios.create({
   baseURL: `${origin}/api/markets`,
 });
 
-
+/** ------------------------------------------------------------
+ * Normal markets fetch (extended to support optional `ids`)
+ * ------------------------------------------------------------ */
 export const getCoinsMarkets = async (
   currency: string = 'usd',
   perPage: number = 10,
-  page: number = 1
+  page: number = 1,
+  ids?: string[]
 ): Promise<Coin[]> => {
   const response = await apiClient.get('/coins/markets', {
     params: {
@@ -28,12 +29,65 @@ export const getCoinsMarkets = async (
       per_page: perPage,
       page,
       sparkline: true,
-      price_change_percentage: '1h,24h,7d'
+      price_change_percentage: '1h,24h,7d',
+      ...(ids && ids.length > 0 ? { ids: ids.join(',') } : {}),
     },
   });
+
   return response.data;
 };
 
+/** ------------------------------------------------------------
+ * Step 1: Search endpoint → return only IDs
+ * ------------------------------------------------------------ */
+type SearchCoin = {
+  id: string;
+  name: string;
+  symbol: string;
+  market_cap_rank: number | null;
+};
+
+export async function searchCoinIds(query: string): Promise<string[]> {
+  if (!query.trim()) return [];
+
+  const res = await apiClient.get('/search', {
+    params: { query },
+  });
+
+  const coins = (res.data.coins ?? []) as SearchCoin[];
+
+  // Limit to a reasonable number
+  return coins.slice(0, 30).map((c) => c.id);
+}
+
+/** ------------------------------------------------------------
+ * Step 2: Combined helper — search → then markets (paged)
+ * ------------------------------------------------------------ */
+export async function searchCoinsMarkets(
+  query: string,
+  currency: string,
+  perPage: number,
+  page: number
+): Promise<Coin[]> {
+  // Step 1: Get IDs from search
+  const ids = await searchCoinIds(query);
+  if (!ids.length) return [];
+
+  // Step 2: Pagination logic
+  const start = (page - 1) * perPage;
+  const end = start + perPage;
+  const pageIds = ids.slice(start, end);
+  if (!pageIds.length) return [];
+
+  // Step 3: Call markets endpoint using the filtered IDs
+  return getCoinsMarkets(currency, pageIds.length, 1, pageIds);
+}
+
+
+
+/** ------------------------------------------------------------
+ * Currencies helper
+ * ------------------------------------------------------------ */
 export const getCurrencies = async (): Promise<string[]> => {
   const response = await apiClient.get<string[]>('/simple/supported_vs_currencies');
   return response.data;
