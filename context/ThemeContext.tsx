@@ -8,6 +8,8 @@ interface ThemeContextType {
   toggleTheme: () => void;
   currency: string;
   setCurrency: (currency: string) => void;
+  search: string;
+  setSearch: (s: string) => void;
 }
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
@@ -35,8 +37,10 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
     document.documentElement.classList.toggle('dark');
   };
 
+  const [search, setSearch] = useState("");
+
   return (
-    <ThemeContext.Provider value={{ isDarkMode, toggleTheme, currency, setCurrency }}>
+    <ThemeContext.Provider value={{ isDarkMode, toggleTheme, currency, setCurrency, search, setSearch }}>
       {children}
     </ThemeContext.Provider>
   );

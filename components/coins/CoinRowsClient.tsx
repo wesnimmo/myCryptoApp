@@ -8,15 +8,15 @@ import CoinRow from './CoinRow';
 import CoinRowsSkeleton from './CoinRowSkeleton';
 
 export default function CoinRowsClient() {
-  const { currency } = useTheme();
+  const { currency, search, setSearch } = useTheme();
 
-  // 🔹 User input
-  const [search, setSearch] = useState("");
-
-  // 🔹 Debounce search value to avoid spam-fetching
+  // Debounce search value to avoid spam-fetching
   const debouncedSearch = useDebouncedValue(search, 300);
 
-  // 🔹 Unified infinite query (handles both search + normal)
+  const effectiveSearch =
+  debouncedSearch.trim().length >= 2 ? debouncedSearch.trim() : undefined;
+
+  // Unified infinite query (handles both search + normal)
   const {
     data,
     fetchNextPage,
@@ -24,9 +24,9 @@ export default function CoinRowsClient() {
     isFetchingNextPage,
     status,
     error,
-  } = useCoinsInfinite(currency, debouncedSearch); // Pass in search term
+  } = useCoinsInfinite(currency, effectiveSearch); // Pass in search term
 
-  // 🔹 Skeleton while loading
+  // Skeleton while loading
   if (status === 'pending') {
     return (
       <>
@@ -55,7 +55,7 @@ export default function CoinRowsClient() {
 
   return (
     <>
-      {/* 🔍 Search input */}
+      {/* Search input */}
       <SearchBar search={search} setSearch={setSearch} />
 
       {/* List rows */}
@@ -85,7 +85,7 @@ export default function CoinRowsClient() {
   );
 }
 
-/** 🔍 Extracted tiny SearchBar component */
+/**Extracted tiny SearchBar component */
 function SearchBar({
   search,
   setSearch,
@@ -95,7 +95,7 @@ function SearchBar({
 }) {
   return (
     <tr>
-      <td colSpan={9} className="p-3 bg-gray-100 dark:bg-gray-800">
+      <td colSpan={9} className="p-3 bg-[var(--background)] text-[var(--text)]">
         <input
           type="text"
           placeholder="Search coins…"

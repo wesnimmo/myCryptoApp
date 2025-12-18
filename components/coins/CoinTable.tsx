@@ -22,17 +22,17 @@ export default function CoinsTable() {
         <col className="w-36" />
         <col className="w-28" />
       </colgroup>
-      <thead className="bg-gray-100 dark:bg-gray-800">
+      <thead className="bg-[var(--background)] text-[var(--text)]">
         <tr>
-          <th scope="col" className="text-center py-4 px-2 font-semibold text-gray-700 sticky top-0 bg-inherit z-10">Rank</th>
-          <th scope="col" className="text-left py-4 px-20 font-semibold text-gray-700">Name / Symbol</th>
-          <th scope="col" className="text-left py-4 font-semibold text-gray-700">Price</th>
-          <th scope="col" className="text-center py-4 px-2 font-semibold text-gray-700">1h %</th>
-          <th scope="col" className="text-center py-4 px-2 font-semibold text-gray-700">24h %</th>
-          <th scope="col" className="text-center py-4 px-2 font-semibold text-gray-700">Market Cap</th>
-          <th scope="col" className="text-center py-4 px-2 font-semibold text-gray-700">Volume</th>
-          <th scope="col" className="text-center py-4 px-2 font-semibold text-gray-700">Vol / Mkt Cap</th>
-          <th scope="col" className="text-center py-4 px-2 font-semibold text-gray-700">Last 7 Days</th>
+          <th scope="col" className="text-center py-4 px-2 font-semibold sticky top-0 bg-inherit z-10">Rank</th>
+          <th scope="col" className="text-left py-4 px-20 font-semibold">Name / Symbol</th>
+          <th scope="col" className="text-left py-4 font-semibold">Price</th>
+          <th scope="col" className="text-center py-4 px-2 font-semibold">1h %</th>
+          <th scope="col" className="text-center py-4 px-2 font-semibold">24h %</th>
+          <th scope="col" className="text-center py-4 px-2 font-semibold">Market Cap</th>
+          <th scope="col" className="text-center py-4 px-2 font-semibold">Volume</th>
+          <th scope="col" className="text-center py-4 px-2 font-semibold">Vol / Mkt Cap</th>
+          <th scope="col" className="text-center py-4 px-2 font-semibold">Last 7 Days</th>
         </tr>
       </thead>
       <tbody>
