@@ -11,6 +11,8 @@ jest.mock("@/context/ThemeContext", () => ({
     isDarkMode: false,
     toggleTheme: jest.fn(),
     setCurrency: jest.fn(),
+    search: "",             
+    setSearch: jest.fn()
   }),
 }));
 
