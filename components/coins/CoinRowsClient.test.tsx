@@ -65,7 +65,13 @@ it("renders rows and the Load More button", () => {
     error: null,
   });
 
-  render(<CoinRowsClient />);
+  render(
+    <table>
+      <tbody>
+        <CoinRowsClient />
+      </tbody>
+    </table>
+  );
 
   expect(screen.getByPlaceholderText(/search coins/i)).toBeInTheDocument();
   expect(screen.getByTestId("coin-row-bitcoin")).toBeInTheDocument();
@@ -85,7 +91,13 @@ it("updates rows when search text changes", () => {
     error: null,
   });
 
-  const { rerender } = render(<CoinRowsClient />);
+  const { rerender } = render(
+   <table>
+    <tbody>
+      <CoinRowsClient />
+    </tbody>
+  </table>
+  );
 
   const input = screen.getByPlaceholderText(/search coins/i);
   fireEvent.change(input, { target: { value: "eth" } });
@@ -99,7 +111,13 @@ it("updates rows when search text changes", () => {
     error: null,
   });
 
-  rerender(<CoinRowsClient />);
+  rerender(
+   <table>
+    <tbody>
+      <CoinRowsClient />
+    </tbody>
+  </table>
+  );
 
   expect(screen.getByTestId("coin-row-ethereum")).toBeInTheDocument();
 });

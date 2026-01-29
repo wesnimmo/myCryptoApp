@@ -1,7 +1,7 @@
 'use client';
 
 import axios from 'axios';
-import type { Coin } from './types';
+import type { Coin, CoinDetail, MarketChart  } from './types';
 
 const isServer = typeof window === "undefined";
 
@@ -36,6 +36,8 @@ export const getCoinsMarkets = async (
 
   return response.data;
 };
+
+
 
 /** ------------------------------------------------------------
  * Step 1: Search endpoint → return only IDs
@@ -92,3 +94,34 @@ export const getCurrencies = async (): Promise<string[]> => {
   const response = await apiClient.get<string[]>('/simple/supported_vs_currencies');
   return response.data;
 };
+
+
+/** ------------------------------------------------------------
+ * Single Coin Data
+ * ------------------------------------------------------------ */
+
+export async function getCoinById(id: string): Promise<CoinDetail> {
+  const res = await apiClient.get(`/coins/${id}`, {
+    params: {
+      localization: false,
+      tickers: false,
+      market_data: true,
+      community_data: false,
+      developer_data: false,
+      sparkline: false,
+    },
+  });
+  return res.data;
+}
+
+export async function getCoinMarketChart(
+  id: string,
+  currency: string,
+  days: number | string
+): Promise<MarketChart> {
+  const res = await apiClient.get(`/coins/${id}/market_chart`, {
+    params: { vs_currency: currency, days },
+  });
+  return res.data;
+}
+

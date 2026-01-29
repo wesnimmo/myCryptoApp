@@ -12,13 +12,9 @@ function createTestQueryClient() {
     return new QueryClient({
       defaultOptions: { queries: { retry: 0, staleTime: 0 } },
     });
-  }
+}
 
 describe('Header', () => {
-  beforeAll(() => server.listen());
-  beforeEach(() => server.resetHandlers());
-  afterEach(() => server.resetHandlers());
-  afterAll(() => server.close());
 
   test('fetches and renders supported currencies from CoinGecko API', async () => {
     // Arrange: mock MSW response (already in handlers.ts, but can override if needed)

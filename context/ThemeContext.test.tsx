@@ -13,7 +13,6 @@ function createTestQueryClient() {
 }
 
 describe('<ThemeProvider>', () => {
-  beforeAll(() => server.listen());
   beforeEach(() => {
     // Reset MSW handlers and DOM
     server.resetHandlers();
@@ -30,11 +29,38 @@ describe('<ThemeProvider>', () => {
       </QueryClientProvider>
     );
   });
-  afterEach(() => {
-    // Cleanup DOM and React tree
-    cleanup();
+  
+  test('currency selector updates the currency', async () => {
+    const select = await screen.findByTestId('currency-select');
+    expect(select).toHaveValue('usd'); // Default from ThemeContext
+
+    await userEvent.selectOptions(select, 'eur');
+    expect(select).toHaveValue('eur');
   });
-  afterAll(() => server.close());
+
+  test('persists currency selection to localStorage', async () => {
+    // Arrange — render provider + Header
+    const select = await screen.findByTestId('currency-select');
+
+    // Act — change the currency
+    await userEvent.selectOptions(select, 'eur');
+
+    // Assert — localStorage recorded the change
+    expect(localStorage.getItem('currency')).toBe(JSON.stringify('eur'));
+  });
+
+  test('persists theme choice to localStorage', async () => {
+    const toggleButton = screen.getByTestId('theme-toggle');
+
+    // Start in light mode by default
+    expect(localStorage.getItem('dark-mode')).toBe('false');
+
+    // Act — toggle to dark mode
+    await userEvent.click(toggleButton);
+
+    // Assert — localStorage reflects dark mode
+    expect(localStorage.getItem('dark-mode')).toBe(JSON.stringify(true));
+  });
 
   test('theme toggle switches from light to dark', async () => {
     // Wait for currencies to load to ensure Header is fully rendered
@@ -66,38 +92,6 @@ describe('<ThemeProvider>', () => {
     await userEvent.click(toggleButton);
     expect(screen.getByTestId('moon-icon')).toBeInTheDocument();
     expect(document.documentElement).not.toHaveClass('dark');
-  });
-
-  test('currency selector updates the currency', async () => {
-    const select = await screen.findByTestId('currency-select');
-    expect(select).toHaveValue('usd'); // Default from ThemeContext
-
-    await userEvent.selectOptions(select, 'eur');
-    expect(select).toHaveValue('eur');
-  });
-
-  test('persists currency selection to localStorage', async () => {
-    // Arrange — render provider + Header
-    const select = await screen.findByTestId('currency-select');
-
-    // Act — change the currency
-    await userEvent.selectOptions(select, 'eur');
-
-    // Assert — localStorage recorded the change
-    expect(localStorage.getItem('currency')).toBe(JSON.stringify('eur'));
-  });
-
-  test('persists theme choice to localStorage', async () => {
-    const toggleButton = screen.getByTestId('theme-toggle');
-
-    // Start in light mode by default
-    expect(localStorage.getItem('dark-mode')).toBe('false');
-
-    // Act — toggle to dark mode
-    await userEvent.click(toggleButton);
-
-    // Assert — localStorage reflects dark mode
-    expect(localStorage.getItem('dark-mode')).toBe(JSON.stringify(true));
   });
 
 

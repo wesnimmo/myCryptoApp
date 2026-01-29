@@ -1,5 +1,6 @@
 // components/ListItem.tsx
 import React from "react";
+import Link from "next/link";
 import Image from "next/image";
 import { InformationCircleIcon, ChevronUpIcon, ChevronDownIcon } from "@heroicons/react/24/solid";
 import { formatCurrency, formatCurrencyCompact } from "@/utils/format/currency";
@@ -54,23 +55,27 @@ export default function CoinRow({ coin, currency }: CoinRowProps) {
 
       {/* Name / Symbol / Image */}
       <td className="px-20 py-3 align-middle min-w-[180px]">
-        <div className="flex items-center text-center gap-2">
-            {/* Reserve fixed space for the image */}
-            <div className="w-8 flex-shrink-0 flex justify-center">
-                <Image
-                    width={24}
-                    height={24}
-                    src={coin.image}
-                    alt={`${coin.name} logo`}
-                    className="w-6 h-6 rounded-full border"
-                />
-            </div>
-                {/* Text block */}
-            <div className="flex flex-col">
-                <span className="font-semibold">{coin.name}</span>
-                <span className="text-xs text-left uppercase text-gray-400">{coin.symbol}</span>
-            </div>
-        </div>
+            <Link
+              href={`/coins/${coin.id}?currency=${currency}`}
+              className="flex items-center text-center gap-2 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded cursor-pointer"
+              aria-label={`View ${coin.name} details`}
+            >
+              {/* Reserve fixed space for the image */}
+              <div className="w-8 flex-shrink-0 flex justify-center">
+                  <Image
+                      width={24}
+                      height={24}
+                      src={coin.image}
+                      alt={`${coin.name} logo`}
+                      className="w-6 h-6 rounded-full border"
+                  />
+              </div>
+                  {/* Text block */}
+              <div className="flex flex-col">
+                  <span className="font-semibold">{coin.name}</span>
+                  <span className="text-xs text-left uppercase text-gray-400">{coin.symbol}</span>
+              </div>
+          </Link>
       </td>
 
 

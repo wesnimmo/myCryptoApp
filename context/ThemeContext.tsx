@@ -2,6 +2,7 @@
 
 import { useLocalStorage } from '@/hooks/useLocalStorage';
 import { createContext, useContext, useState, ReactNode, useEffect } from 'react';
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 interface ThemeContextType {
   isDarkMode: boolean;
@@ -15,32 +16,53 @@ interface ThemeContextType {
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 export const ThemeProvider = ({ children }: { children: ReactNode }) => {
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+
+  const urlCurrency = searchParams.get("currency");
+
   const [isDarkMode, setIsDarkMode] = useLocalStorage('dark-mode', false);
-  const [currency, setCurrency] = useLocalStorage('currency', 'usd');
+  const [currencyLS, setCurrencyLS] = useLocalStorage('currency', 'usd');
 
-   // New useEffect to handle initial theme application and localStorage updates
-   useEffect(() => {
-    // Check localStorage for preferred theme and apply it
-    const storedTheme = localStorage.getItem('dark-mode');
-    if (storedTheme === 'true') { // Use string 'true' for localStorage
-      document.documentElement.classList.add('dark');
-      setIsDarkMode(true); // Update state to reflect stored preference
-    } else {
-      document.documentElement.classList.remove('dark');
-      setIsDarkMode(false); // Update state to reflect default or light preference
+  const activeCurrency = (urlCurrency || currencyLS || 'usd').toLowerCase();
+
+  // Optional: persist URL currency to localStorage so refresh/new visit matches
+  useEffect(() => {
+    if (urlCurrency && urlCurrency.toLowerCase() !== currencyLS) {
+      setCurrencyLS(urlCurrency.toLowerCase());
     }
-  }, []); 
+  }, [urlCurrency, currencyLS, setCurrencyLS]);
 
+  const setCurrency = (next: string) => {
+    const normalized = next.toLowerCase();
+    setCurrencyLS(normalized);
 
-  const toggleTheme = () => {
-    setIsDarkMode((prev) => !prev);
-    document.documentElement.classList.toggle('dark');
+    const sp = new URLSearchParams(searchParams.toString());
+    sp.set("currency", normalized);
+
+    router.replace(`${pathname}?${sp.toString()}`, { scroll: false });
   };
+
+  useEffect(() => {
+    document.documentElement.classList.toggle('dark', isDarkMode);
+  }, [isDarkMode]);
+
+  const toggleTheme = () => setIsDarkMode(prev => !prev);
 
   const [search, setSearch] = useState("");
 
   return (
-    <ThemeContext.Provider value={{ isDarkMode, toggleTheme, currency, setCurrency, search, setSearch }}>
+    <ThemeContext.Provider
+      value={{
+        isDarkMode,
+        toggleTheme,
+        currency: activeCurrency,
+        setCurrency,
+        search,
+        setSearch,
+      }}
+    >
       {children}
     </ThemeContext.Provider>
   );
