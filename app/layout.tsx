@@ -1,4 +1,5 @@
 // app/layout.tsx
+import { Suspense } from 'react';
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google'; // Use Inter as a fallback
 import './globals.css';
@@ -25,13 +26,15 @@ export default function RootLayout({
     <html lang="en" className={inter.variable}>
       <body>
         <QueryProvider>
-          <ThemeProvider>
-            <Header />
-            <div className="w-full max-w-[1140px] mx-auto bg-[var(--background)] shadow-sm min-h-screen sm:p-4 sm:rounded-lg">
-             {/* <MSWInit /> */}
-              {children}
-            </div>
-          </ThemeProvider>
+          <Suspense fallback={null}>
+            <ThemeProvider>
+              <Header />
+              <div className="w-full max-w-[1140px] mx-auto bg-[var(--background)] shadow-sm min-h-screen sm:p-4 sm:rounded-lg">
+              {/* <MSWInit /> */}
+                {children}
+              </div>
+            </ThemeProvider>
+          </Suspense>
         </QueryProvider>
       </body>
     </html>
