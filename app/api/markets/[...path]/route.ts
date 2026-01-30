@@ -12,7 +12,7 @@ export async function GET(request: NextRequest) {
     const response = await fetch(coingeckoApiUrl);
     const data = await response.json();
     return NextResponse.json(data, { status: response.status });
-  } catch (error) {
+  } catch (_error) {
     return NextResponse.json({ error: 'Failed to fetch data from CoinGecko API' }, { status: 500 });
   }
 }

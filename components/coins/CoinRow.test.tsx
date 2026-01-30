@@ -1,6 +1,7 @@
 // components/coins/CoinRow.test.tsx
 import { render, screen } from '@testing-library/react';
 import CoinRow from './CoinRow';
+import { Coin } from '@/lib/types';
 
 // 1. Mock the Sparkline component so it doesn't try to animate or update state
 jest.mock('../charts/Sparkline', () => {
@@ -27,7 +28,7 @@ describe('<CoinRow />', () => {
     render(
       <table>
         <tbody>
-          <CoinRow coin={coin as any} currency="eur" />
+          <CoinRow coin={coin as Coin} currency="eur" />
         </tbody>
       </table>
     );

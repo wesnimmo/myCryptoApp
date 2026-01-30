@@ -1,6 +1,6 @@
 // lib/coingecko-server-service.ts (No 'use client' at the top)
 
-import type { Coin, CoinDetail, MarketChart } from './types';
+import type { CoinDetail, MarketChart } from './types';
 
 // Centralized fetch utility (no changes needed here)
 export async function fetchFromCoinGecko(path: string, searchParams: string) {

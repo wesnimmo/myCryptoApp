@@ -1,6 +1,5 @@
 'use client';
 
-import { useState } from 'react';
 import { useTheme } from '@/context/ThemeContext';
 import { useDebouncedValue } from '@/hooks/useDebouncedValue';
 import { useCoinsInfinite } from '@/hooks/useCoinsInfinite';
