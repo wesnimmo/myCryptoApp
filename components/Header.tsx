@@ -15,7 +15,7 @@ export default function Header() {
     <header className="mb-8 w-full bg-[var(--background)] text-[var(--text)] shadow-md">
     <div className="flex justify-between items-center max-w-[1140px] mx-auto p-4">
       <Link href="/" onClick={() => setSearch("")}>
-         <h1 className="text-2xl font-bold">Crypto App</h1>
+         <h1 className="text-2xl font-bold">My Crypto App</h1>
       </Link>
 
       <button
