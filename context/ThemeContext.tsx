@@ -1,7 +1,7 @@
 'use client';
 
 import { useLocalStorage } from '@/hooks/useLocalStorage';
-import { createContext, useContext, useState, ReactNode, useEffect } from 'react';
+import { createContext, useContext, useState, ReactNode, useEffect, useCallback } from 'react';
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 interface ThemeContextType {
@@ -27,22 +27,25 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
 
   const activeCurrency = (urlCurrency || currencyLS || 'usd').toLowerCase();
 
-  // Optional: persist URL currency to localStorage so refresh/new visit matches
-  useEffect(() => {
-    if (urlCurrency && urlCurrency.toLowerCase() !== currencyLS) {
-      setCurrencyLS(urlCurrency.toLowerCase());
-    }
-  }, [urlCurrency, currencyLS, setCurrencyLS]);
 
-  const setCurrency = (next: string) => {
+  // 1. Wrap in useCallback to stabilize the function identity
+  const setCurrency = useCallback((next: string) => {
     const normalized = next.toLowerCase();
-    setCurrencyLS(normalized);
-
     const sp = new URLSearchParams(searchParams.toString());
     sp.set("currency", normalized);
 
     router.replace(`${pathname}?${sp.toString()}`, { scroll: false });
-  };
+  }, [pathname, router, searchParams]); // Dependencies for the function itself
+
+  // 2. Now it's safe to include in the useEffect
+  useEffect(() => {
+    if (urlCurrency) {
+      setCurrencyLS(urlCurrency.toLowerCase());
+    } 
+    else if (currencyLS && !urlCurrency) {
+      setCurrency(currencyLS); 
+    }
+  }, [urlCurrency, currencyLS, setCurrencyLS, setCurrency]); // Added setCurrency here
 
   useEffect(() => {
     document.documentElement.classList.toggle('dark', isDarkMode);
