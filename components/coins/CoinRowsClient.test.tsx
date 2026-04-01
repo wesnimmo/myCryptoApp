@@ -37,6 +37,7 @@ jest.mock("./CoinRow", () => {
 // Mock useCoinsInfinite
 // ------------------------------
 const mockUseCoinsInfinite = jest.fn();
+
 jest.mock("@/hooks/useCoinsInfinite", () => ({
   useCoinsInfinite: (...args: unknown[]) => mockUseCoinsInfinite(...args),
 }));

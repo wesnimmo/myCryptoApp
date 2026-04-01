@@ -4,6 +4,7 @@ import CoinRowsClient from "./CoinRowsClient";
 
 jest.mock("./CoinRowsClient", () => ({
   __esModule: true,
+  
   default: jest.fn(() => (
     <tr>
       <td>Mock Coin Rows Client</td>

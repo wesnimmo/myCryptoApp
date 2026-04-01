@@ -30,8 +30,8 @@ export default function CoinRow({ coin, currency }: CoinRowProps) {
     const getChangeClass = (val: number) =>
         val > 0 ? "text-green-600" : val < 0 ? "text-red-500" : "text-gray-500";
 
-    const v1h  = coin.price_change_percentage_1h_in_currency ?? coin.price_change_percentage_1h_in_currency ?? 0;
-    const v24h = coin.price_change_percentage_24h ?? coin.price_change_percentage_24h ?? 0;
+    const v1h  = coin.price_change_percentage_1h_in_currency ?? 0;
+    const v24h = coin.price_change_percentage_24h ?? 0;
 
     const color1h  = getChangeClass(v1h);
     const color24h = getChangeClass(v24h);
@@ -41,8 +41,8 @@ export default function CoinRow({ coin, currency }: CoinRowProps) {
 
   function ChangeIcon({ v }: { v: number }) {
     //console.log("ChangeIcon value:", v);
-    if (v > 0) return <ChevronUpIcon className="w-4 h-4 text-emerald-500" aria-hidden />;
-    if (v < 0) return <ChevronDownIcon className="w-4 h-4 text-rose-500" aria-hidden />;
+    if (v > 0) return <ChevronUpIcon data-testid="up-icon" className="w-4 h-4 text-emerald-500" aria-hidden />;
+    if (v < 0) return <ChevronDownIcon data-testid="down-icon" className="w-4 h-4 text-rose-500" aria-hidden />;
     return <span className="inline-block w-4 h-4" aria-hidden />;
   }
 
