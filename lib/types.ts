@@ -24,6 +24,9 @@ export type CoinDetail = {
     market_cap: Record<string, number>;
     total_volume: Record<string, number>;
     price_change_percentage_24h?: number;
+    fully_diluted_valuation: Record<string, number>;
+    circulating_supply: number;
+    max_supply: number | null;
   };
 };
 

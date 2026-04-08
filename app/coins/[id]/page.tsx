@@ -5,7 +5,12 @@ import { getCoinByIdServer } from "@/lib/coingecko-server-service";
 import CurrencyConverter from "@/components/coins/CurrencyConverter";
 import { formatCurrency } from "@/utils/format/currency";
 
-export default async function CoinPage({ params, searchParams }: PageProps) {
+type CoinPageProps = {
+  params: Promise<{ id: string }>;
+  searchParams: Promise<{ currency?: string }>;
+};
+
+export default async function CoinPage({ params, searchParams }: CoinPageProps) {
   const { id } = await params;
   const { currency: rawCurrency } = await searchParams;
   const currency = (rawCurrency ?? "usd").toLowerCase();
@@ -76,9 +81,9 @@ export default async function CoinPage({ params, searchParams }: PageProps) {
 
           <section className="bg-gray-50 dark:bg-gray-800/40 border border-gray-200 dark:border-gray-700 rounded-3xl p-8">
             <h3 className="text-xl font-bold mb-6">Market Statistics</h3>
-            <StatRow label="Market Cap" value={formatCurrency(coin.market_data?.market_cap?.[currency], currency)} />
-            <StatRow label="Fully Diluted" value={formatCurrency(coin.market_data?.fully_diluted_valuation?.[currency], currency)} />
-            <StatRow label="24h Volume" value={formatCurrency(coin.market_data?.total_volume?.[currency], currency)} />
+            <StatRow label="Market Cap" value={formatCurrency(coin.market_data?.market_cap?.[currency] ?? 0, currency)} />
+            <StatRow label="Fully Diluted" value={formatCurrency(coin.market_data?.fully_diluted_valuation?.[currency] ?? 0, currency)} />
+            <StatRow label="24h Volume" value={formatCurrency(coin.market_data?.total_volume?.[currency] ?? 0, currency)} />
             <StatRow label="Circulating Supply" value={`${coin.market_data?.circulating_supply?.toLocaleString()} ${coin.symbol.toUpperCase()}`} />
           </section>
         </div>
