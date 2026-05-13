@@ -3,19 +3,14 @@
 A modern cryptocurrency dashboard built with **Next.js (App Router, TypeScript)**, **Tailwind CSS v4**, **React Query**, and the **CoinGecko API**.  
 This project demonstrates a production-grade, accessible, responsive UI with global dark/light mode, live market data, robust state management, and test-driven development.
 
-## Table of Contents
+> ### ⚠️ Development Status: In-Progress
+> This project is an active portfolio piece currently undergoing a major architectural refactor. 
+> - **Completed:** Core Market Table, CI/CD Pipeline (GitHub Actions), Unit/Integration Testing Suite, and Global Theme/Currency State.
+> - **In-Active Development:** The **Coin Detail Page** and **Currency Converter** are currently in a "Beta/Refactor" state. Interactive charts and finalized typography sanitization are the next scheduled milestones.
+> - **Purpose:** This project serves as a live demonstration of "Vibe Coding" combined with strict TDD and Next.js 15 Server Component patterns for educational purposes.
 
-- [Features](#features)
-- [Demo](#demo)
-- [Tech Stack](#tech-stack)
-- [Getting Started](#getting-started)
-- [Design & Technical Decisions](#design--technical-decisions)
-- [Directory Structure](#directory-structure)
-- [Testing](#testing)
-- [Future Enhancements](#future-enhancements)
-- [Contributing](#contributing)
-- [License](#license)
-- [Contact](#contact)
+## Table of Contents
+... (Keep as is) ...
 
 ## Features
 
@@ -25,11 +20,13 @@ This project demonstrates a production-grade, accessible, responsive UI with glo
 - **Responsive Table UI** – Custom table with rank, symbol, price, 24h change, 24h volume, and sparklines.
 - **Pagination** – View 10 coins per page, with intuitive navigation.
 - **Search Filtering** – Filter table by currency name or symbol.
-- **Coin Detail View** – Individual currency pages with large chart, metadata, and interactive conversion calculator.
+- **Coin Detail View (Beta)** – Individual currency pages featuring a responsive 2-column layout. *Note: Advanced chart interactivity and bidrectional conversion logic are currently under construction.*
 - **Top Movers Ticker** – Animated ticker for top 10 gainers over 24h/7d.
 - **Reusable API Layer** – Centralized, type-safe API logic with React Query caching.
 - **TDD-First Approach** – Comprehensive unit/integration tests with Jest and React Testing Library.
 - **CI/CD** – Automated linting, tests, and deployment via GitHub Actions and Vercel.
+
+... (Rest of the README remains the same) ...
 
 ## Demo
 
