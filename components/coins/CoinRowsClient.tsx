@@ -7,7 +7,7 @@ import CoinRow from './CoinRow';
 import CoinRowsSkeleton from './CoinRowSkeleton';
 
 export default function CoinRowsClient() {
-  const { currency, search, setSearch } = useTheme();
+  const { currency, search } = useTheme();
 
   // Debounce search value to avoid spam-fetching
   const debouncedSearch = useDebouncedValue(search, 300);
@@ -23,46 +23,30 @@ export default function CoinRowsClient() {
     isFetchingNextPage,
     status,
     error,
-  } = useCoinsInfinite(currency, effectiveSearch); // Pass in search term
+  } = useCoinsInfinite(currency, effectiveSearch);
 
-  // Skeleton while loading
   if (status === 'pending') {
-    return (
-      <>
-        {/* Search bar always visible */}
-        <SearchBar search={search} setSearch={setSearch} />
-        <CoinRowsSkeleton rows={10} />
-      </>
-    );
+    return <CoinRowsSkeleton rows={10} />;
   }
 
   if (status === "error") {
     return (
-      <>
-        <SearchBar search={search} setSearch={setSearch} />
-        <tr>
-          <td colSpan={9} className="py-6 text-center text-red-500">
-            Failed to load coins: {error?.message}
-          </td>
-        </tr>
-      </>
+      <tr>
+        <td colSpan={9} className="py-6 text-center text-red-500">
+          Failed to load coins: {error?.message}
+        </td>
+      </tr>
     );
   }
 
-  // Flatten infinite pages
   const coins = data?.pages.flat() ?? [];
 
   return (
     <>
-      {/* Search input */}
-      <SearchBar search={search} setSearch={setSearch} />
-
-      {/* List rows */}
       {coins.map((c) => (
         <CoinRow key={c.id} coin={c} currency={currency} />
       ))}
 
-      {/* Load more button */}
       <tr>
         <td colSpan={9} className="py-4">
           <div className="flex justify-center">
@@ -81,28 +65,5 @@ export default function CoinRowsClient() {
         </td>
       </tr>
     </>
-  );
-}
-
-/**Extracted tiny SearchBar component */
-function SearchBar({
-  search,
-  setSearch,
-}: {
-  search: string;
-  setSearch: (v: string) => void;
-}) {
-  return (
-    <tr>
-      <td colSpan={9} className="p-3 bg-[var(--background)] text-[var(--text)]">
-        <input
-          type="text"
-          placeholder="Search coins…"
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          className="w-full p-2 rounded bg-white dark:bg-gray-700 text-black dark:text-white border border-gray-300 dark:border-gray-600"
-        />
-      </td>
-    </tr>
   );
 }
