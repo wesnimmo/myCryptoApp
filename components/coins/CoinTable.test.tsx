@@ -2,9 +2,19 @@ import { render, screen } from "@testing-library/react";
 import CoinTable from "./CoinTable";
 import CoinRowsClient from "./CoinRowsClient";
 
+jest.mock("@/context/ThemeContext", () => ({
+  useTheme: () => ({
+    currency: "usd",
+    isDarkMode: false,
+    toggleTheme: jest.fn(),
+    setCurrency: jest.fn(),
+    search: "",
+    setSearch: jest.fn(),
+  }),
+}));
+
 jest.mock("./CoinRowsClient", () => ({
   __esModule: true,
-  
   default: jest.fn(() => (
     <tr>
       <td>Mock Coin Rows Client</td>
@@ -13,10 +23,9 @@ jest.mock("./CoinRowsClient", () => ({
 }));
 
 describe("CoinTable component", () => {
-  it("renders table headers and the CoinRowsClient component", () => {
+  it("renders table headers, search bar, and CoinRowsClient", () => {
     render(<CoinTable />);
 
-    // Headers
     expect(
       screen.getByRole("columnheader", { name: /Rank/i })
     ).toBeInTheDocument();
@@ -45,7 +54,7 @@ describe("CoinTable component", () => {
       screen.getByRole("columnheader", { name: /Last 7 Days/i })
     ).toBeInTheDocument();
 
-    // Mocked child
+    expect(screen.getByPlaceholderText(/search coins/i)).toBeInTheDocument();
     expect(screen.getByText("Mock Coin Rows Client")).toBeInTheDocument();
     expect(CoinRowsClient).toHaveBeenCalledTimes(1);
   });

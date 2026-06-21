@@ -1,6 +1,7 @@
 import { Suspense } from "react";
 import CoinRowsClient from "./CoinRowsClient";
 import CoinRowSkeleton from "./CoinRowSkeleton";
+import CoinSearchBar from "./CoinSearchBar";
 
 // interface Props { coins: Coin[]; }
 
@@ -36,9 +37,10 @@ export default function CoinsTable() {
         </tr>
       </thead>
       <tbody>
-       <Suspense fallback={<CoinRowSkeleton rows={10} />}>
-        <CoinRowsClient/>
-       </Suspense>
+        <CoinSearchBar />
+        <Suspense fallback={<CoinRowSkeleton rows={10} />}>
+          <CoinRowsClient />
+        </Suspense>
       </tbody>
     </table>
   );
