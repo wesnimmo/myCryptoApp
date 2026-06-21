@@ -25,6 +25,7 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
   const [isDarkMode, setIsDarkMode] = useLocalStorage('dark-mode', false);
   const [currencyLS, setCurrencyLS] = useLocalStorage('currency', 'usd');
 
+  //It explicitly handles priority. If someone opens a shared link with a currency parameter, the URL wins. If they just type in your root domain, it falls back to their local storage preference. If it's a first-time user, it defaults to `'usd'`.
   const activeCurrency = (urlCurrency || currencyLS || 'usd').toLowerCase();
 
 

@@ -13,40 +13,40 @@ export default function Header() {
 
   return (
     <header className="mb-8 w-full bg-[var(--background)] text-[var(--text)] shadow-md">
-    <div className="flex justify-between items-center max-w-[1140px] mx-auto p-4">
-      <Link href="/" onClick={() => setSearch("")}>
-         <h1 className="text-2xl font-bold">My Crypto App</h1>
-      </Link>
+      <div className="flex justify-between items-center max-w-[1140px] mx-auto p-4">
+        <Link href="/" onClick={() => setSearch("")}>
+          <h1 className="text-2xl font-bold">My Crypto App</h1>
+        </Link>
 
-      <button
-        data-testid="theme-toggle"
-        onClick={toggleTheme}
-        className="p-2 rounded shadow-sm"
-      >
-        {isDarkMode ? <FiSun data-testid="sun-icon" /> : <FiMoon data-testid="moon-icon"  />}
-      </button>
-      {isError ? (
-          <p className="text-red-500">Failed to load currencies</p>
-        ) : isLoading ? (
-        <div className="flex justify-center items-center py-4">
-          <ArrowPathIcon className="h-6 w-6 text-blue-500 animate-spin" />
-          <span className="ml-2 text-[var(--text)]">Loading...</span>
-        </div>
-        ) : (
-        <select
-          data-testid="currency-select"
-          value={currency}
-          onChange={(e) => setCurrency(e.target.value)}
-          className="p-2 rounded text-[var(--text)]"
+        <button
+          data-testid="theme-toggle"
+          onClick={toggleTheme}
+          className="p-2 rounded shadow-sm"
         >
-          {currencies?.map((curr) => (
-            <option key={curr} value={curr}>
-              {curr.toUpperCase()}
-            </option>
-          ))}
-        </select>
-      )}
-    </div>
+          {isDarkMode ? <FiSun data-testid="sun-icon" /> : <FiMoon data-testid="moon-icon"  />}
+        </button>
+        {isError ? (
+            <p className="text-red-500">Failed to load currencies</p>
+          ) : isLoading ? (
+          <div className="flex justify-center items-center py-4">
+            <ArrowPathIcon className="h-6 w-6 text-blue-500 animate-spin" />
+            <span className="ml-2 text-[var(--text)]">Loading...</span>
+          </div>
+          ) : (
+          <select
+            data-testid="currency-select"
+            value={currency}
+            onChange={(e) => setCurrency(e.target.value)}
+            className="p-2 rounded text-[var(--text)]"
+          >
+            {currencies?.map((curr) => (
+              <option key={curr} value={curr}>
+                {curr.toUpperCase()}
+              </option>
+            ))}
+          </select>
+        )}
+      </div>
   </header>
   );
 }
