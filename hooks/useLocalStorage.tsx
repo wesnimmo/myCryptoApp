@@ -25,7 +25,7 @@ export function useLocalStorage<T>(
     // Load from localStorage after hydration
     setValue(getStorageValue(key, defaultValue));
     setIsReady(true);
-  }, [key]);
+  }, [key, defaultValue]);
 
   useEffect(() => {
     if (isReady) {
@@ -33,6 +33,7 @@ export function useLocalStorage<T>(
     }
   }, [key, value, isReady]);
 
-  // Return isReady so caller can avoid rendering until synced
+  //Local storage syncing issue:
+  // Return isReady here only so caller can avoid rendering until synced but outside TanStack will handle all api isLoading states
   return [value, setValue, isReady];
 }

@@ -8,10 +8,7 @@ import type { Coin } from '@/lib/types';
 const PER_PAGE = 25;
 
 export function useCoinsInfinite(currency: string, search?: string) {
-  return useInfiniteQuery<
-    Coin[],   // TQueryFnData   - each page returns Coin[]
-    Error    // TError
-  >({
+  return useInfiniteQuery<Coin[],  Error> ({
     queryKey: ['coins-infinite', currency, search],
 
     queryFn: ({ pageParam = 1 }) =>
