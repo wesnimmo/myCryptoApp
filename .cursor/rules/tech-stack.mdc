@@ -1,0 +1,23 @@
+---
+alwaysApply: true
+---
+
+# Tech Stack & Standards
+
+## Core Architecture
+- **Framework:** Next.js 15 (App Router). Default to Server Components (`page.tsx`, data fetching logic). Use `"use client"` only for client-side state, hooks, or browser-only libraries.
+- **Language:** TypeScript in strict mode. All API payloads, props, context state, and custom hooks must be explicitly typed (`lib/types.ts`).
+- **Styling:** Tailwind CSS v4 with custom dark mode variables (`dark:` variants). Ensure responsive grid layouts (mobile-first).
+
+## Data Fetching & State Management
+- **Server-Side Data Fetching:** Modular services (`lib/coingecko-server-service.ts`) for Server Components and initial page loads.
+- **Client-Side Data Fetching & Caching:** TanStack Query (`@tanstack/react-query`) for interactive client-side fetching, polling, pagination, and caching.
+- Custom client hooks (e.g., `useCoins`) must wrap TanStack Query hooks to maintain clean component abstraction.
+
+## Security
+- Any rendering of external HTML strings (e.g., CoinGecko description fields) MUST be sanitized using `isomorphic-dompurify`.
+
+## Component Guidelines
+- Keep components modular, single-purpose, and accessible.
+- UI elements must support dark/light mode seamless transitions.
+- Maintain a TDD mindset—ensure changes do not break existing Jest/RTL unit tests and MSW API mocks.
